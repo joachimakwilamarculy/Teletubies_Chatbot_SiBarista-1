@@ -2,25 +2,36 @@ package service;
 
 import database.Database;
 import model.Produk;
+import org.mindrot.jbcrypt.BCrypt;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class AdminService {
 
     public boolean login(String username, String password) {
-        String query = "SELECT * FROM admin WHERE username = ? AND password = ?";
+        String query = "SELECT password FROM admin WHERE username = ?";
+
         try (Connection conn = Database.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
+
             pstmt.setString(1, username);
-            pstmt.setString(2, password);
-            ResultSet rs = pstmt.executeQuery();
-            return rs.next();
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    String hashedPassword = rs.getString("password");
+
+                    return BCrypt.checkpw(password, hashedPassword);
+                }
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+        } catch (IllegalArgumentException e) {
+            System.out.println("Format hash password tidak valid.");
         }
+
+        return false;
     }
+
 
     public boolean simpanProduk(Produk p, boolean isEdit) {
         String query;

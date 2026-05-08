@@ -7,6 +7,7 @@ module com.felix_71241153.app.chatbot_sibarista {
     requires java.sql;
     requires javafx.base;
     requires java.desktop;
+    requires jbcrypt;
 
     // Tambahkan baris ini untuk mengizinkan TableView membaca data dari package model
     opens model to javafx.base, javafx.fxml;
