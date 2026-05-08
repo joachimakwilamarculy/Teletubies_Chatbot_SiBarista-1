@@ -81,17 +81,10 @@ public class ChatbotService {
             return balasanMenu();
         }
 
-        // 5. Cari nama produk di dalam kalimat user
-//        String produkDitemukan = cariNamaProdukDalamKalimat(input);
-//        if (produkDitemukan != null) {
-//            return balasanDetail(produkDitemukan);
-//        }
-//
-//        // 6. Kalau user mengetik nama produk langsung
-//        String detail = balasanDetail(input);
-//        if (detail != null) {
-//            return detail;
-//        }
+        if(input.contains("rekomendasi") || input.contains("rekomen") || input.contains("saran") || input.contains("best seller")){
+            return balasanRekomendasi();
+        }
+
 
         String produkDitemukan = cariNamaProdukDalamKalimat(input);
         if (produkDitemukan != null) {
@@ -328,5 +321,27 @@ public class ChatbotService {
         return "Rp" + angka;
     }
 
-
+    public String balasanRekomendasi(){
+        StringBuilder hasil = new StringBuilder();
+        hasil.append("Ini adalah beberapa rekomendasi dari SiBarista :\n\n");
+        String query = """
+                SELECT produk.nama_produk, kategori.nama_kategori, produk.harga FROM produk 
+                JOIN kategori ON produk.id_kategori = kategori.id_kategori
+                WHERE produk.status_stok = 'Tersedia'
+                ORDER BY RAND() LIMIT 2
+                """;
+        try (Connection conn = Database.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            while (rs.next()) {
+                hasil.append("- ").append(rs.getString("nama_produk"))
+                        .append(" (").append(rs.getString("nama_kategori")).append(")\n")
+                        .append("   Harga: ").append(formatRupiah(rs.getInt("harga"))).append("\n\n");
+            }
+        }catch (SQLException e){
+            return "Maaf, rekomendasi untuk sekarang tidak ada";
+        }
+        hasil.append("Ketik nama produk diatas untuk melihat detailnya");
+        return hasil.toString();
+    }
 }

@@ -108,6 +108,16 @@ public class ChatBotController {
         scrollKeBelow();
     }
 
+    @FXML
+    private void handleRekomendasi(ActionEvent event) throws SQLException {
+        String input = "rekomendasi";
+        if (welcomeBox.isVisible()) {
+            transisiKeModeChat();
+        }
+        prosesInput(input);
+        scrollKeBelow();
+    }
+
     // --- Logika Internal Controller ---
 
     private void transisiKeModeChat() {

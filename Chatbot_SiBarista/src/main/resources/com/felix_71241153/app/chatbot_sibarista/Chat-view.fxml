@@ -11,7 +11,6 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.shape.Rectangle?>
 
 <!--
     SiBarista - Coffee Shop Chatbot UI
@@ -27,82 +26,72 @@
         #FFFFFF  = Pure Foam (gelembung user bg)
 -->
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity"
-            minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="700.0" prefWidth="1100.0"
-            xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controller.ChatBotController"
-            style="-fx-background-color: #F0E6D3;">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1100.0" style="-fx-background-color: #F0E6D3;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChatBotController">
 
     <!-- ===== SIDEBAR KIRI ===== -->
     <left>
-        <VBox prefHeight="700.0" prefWidth="230.0" spacing="0"
-              style="-fx-background-color: #1C0A00;"
-              BorderPane.alignment="CENTER">
+        <VBox prefHeight="700.0" prefWidth="230.0" spacing="0" style="-fx-background-color: #1C0A00;" BorderPane.alignment="CENTER">
 
             <!-- Logo Area -->
-            <VBox style="-fx-background-color: #3D1A00;" alignment="CENTER_LEFT">
+            <VBox alignment="CENTER_LEFT" style="-fx-background-color: #3D1A00;">
                 <children>
                     <HBox alignment="CENTER_LEFT" spacing="10">
                         <children>
-                            <Label text="☕" style="-fx-text-fill: #C8A882;">
+                            <Label style="-fx-text-fill: #C8A882;" text="☕">
                                 <font><Font size="22.0" /></font>
                             </Label>
                             <VBox spacing="0">
                                 <children>
-                                    <Label text="SiBarista" style="-fx-text-fill: #FBF7F0;">
+                                    <Label style="-fx-text-fill: #FBF7F0;" text="SiBarista">
                                         <font><Font name="System Bold" size="17.0" /></font>
                                     </Label>
-                                    <Label text="your coffee companion" style="-fx-text-fill: #C8A882;">
+                                    <Label style="-fx-text-fill: #C8A882;" text="your coffee companion">
                                         <font><Font size="9.0" /></font>
                                     </Label>
                                 </children>
                             </VBox>
                         </children>
-                        <padding><Insets top="22.0" left="18.0" bottom="22.0" right="18.0"/></padding>
+                        <padding><Insets bottom="22.0" left="18.0" right="18.0" top="22.0" /></padding>
                     </HBox>
                 </children>
             </VBox>
 
             <!-- Divider bawah logo -->
-            <Region prefHeight="1" style="-fx-background-color: #6B3A2A;" maxWidth="1.7976931348623157E308"/>
+            <Region maxWidth="1.7976931348623157E308" prefHeight="1" style="-fx-background-color: #6B3A2A;" />
 
             <!-- Spacer atas menu -->
-            <Region prefHeight="18"/>
+            <Region prefHeight="18" />
 
             <!-- Menu Navigasi -->
             <VBox spacing="4">
                 <children>
 
                     <!-- Chat / Home (aktif) -->
-                    <HBox alignment="CENTER_LEFT" spacing="12"
-                          style="-fx-background-color: #6B3A2A; -fx-background-radius: 8;">
+                    <HBox alignment="CENTER_LEFT" spacing="12" style="-fx-background-color: #6B3A2A; -fx-background-radius: 8;">
                         <children>
-                            <Label text="💬" style="-fx-text-fill: #FBF7F0;">
+                            <Label style="-fx-text-fill: #FBF7F0;" text="💬">
                                 <font><Font size="14.0" /></font>
                             </Label>
-                            <Label text="Chat / Home" style="-fx-text-fill: #FBF7F0;">
+                            <Label style="-fx-text-fill: #FBF7F0;" text="Chat / Home">
                                 <font><Font name="System Bold" size="13.0" /></font>
                             </Label>
                         </children>
-                        <padding><Insets top="10" left="14" bottom="10" right="14"/></padding>
-                        <VBox.margin><Insets left="10" right="10"/></VBox.margin>
+                        <padding><Insets bottom="10" left="14" right="14" top="10" /></padding>
+                        <VBox.margin><Insets left="10" right="10" /></VBox.margin>
                     </HBox>
 
                     <!-- About -->
-                    <HBox alignment="CENTER_LEFT" spacing="12"
-                          style="-fx-background-color: transparent; -fx-background-radius: 8; -fx-cursor: hand;">
+                    <HBox alignment="CENTER_LEFT" spacing="12" style="-fx-background-color: transparent; -fx-background-radius: 8; -fx-cursor: hand;">
                         <children>
-                            <Label text="📖" style="-fx-text-fill: #C8A882;">
+                            <Label style="-fx-text-fill: #C8A882;" text="📖">
                                 <font><Font size="14.0" /></font>
                             </Label>
-                            <Label text="About" style="-fx-text-fill: #C8A882;">
+                            <Label style="-fx-text-fill: #C8A882;" text="About">
                                 <font><Font size="13.0" /></font>
                             </Label>
                         </children>
-                        <padding><Insets top="10" left="14" bottom="10" right="14"/></padding>
-                        <VBox.margin><Insets left="10" right="10"/></VBox.margin>
+                        <padding><Insets bottom="10" left="14" right="14" top="10" /></padding>
+                        <VBox.margin><Insets left="10" right="10" /></VBox.margin>
                     </HBox>
 
                 </children>
@@ -112,19 +101,19 @@
             <Region VBox.vgrow="ALWAYS" />
 
             <!-- Divider atas footer -->
-            <Region prefHeight="1" style="-fx-background-color: #3D1A00;" maxWidth="1.7976931348623157E308"/>
+            <Region maxWidth="1.7976931348623157E308" prefHeight="1" style="-fx-background-color: #3D1A00;" />
 
             <!-- Footer Sidebar -->
             <VBox alignment="CENTER_LEFT" spacing="4">
                 <children>
-                    <Label text="sibarista" style="-fx-text-fill: #6B3A2A;">
+                    <Label style="-fx-text-fill: #6B3A2A;" text="sibarista">
                         <font><Font name="System Bold Italic" size="26.0" /></font>
                     </Label>
-                    <Label text="v1.0 · Est. 2025" style="-fx-text-fill: #3D1A00;">
+                    <Label style="-fx-text-fill: #3D1A00;" text="v1.0 · Est. 2025">
                         <font><Font size="10.0" /></font>
                     </Label>
                 </children>
-                <padding><Insets top="16" left="18" bottom="20" right="18"/></padding>
+                <padding><Insets bottom="20" left="18" right="18" top="16" /></padding>
             </VBox>
 
         </VBox>
@@ -132,26 +121,21 @@
 
     <!-- ===== AREA UTAMA ===== -->
     <center>
-        <VBox prefHeight="700.0" prefWidth="870.0" spacing="0"
-              style="-fx-background-color: #F0E6D3;"
-              BorderPane.alignment="CENTER">
+        <VBox prefHeight="700.0" prefWidth="870.0" spacing="0" style="-fx-background-color: #F0E6D3;" BorderPane.alignment="CENTER">
 
             <!-- Topbar -->
-            <HBox alignment="CENTER_RIGHT" prefHeight="56"
-                  style="-fx-background-color: #FBF7F0; -fx-border-color: #C8A882; -fx-border-width: 0 0 1 0;">
+            <HBox alignment="CENTER_RIGHT" prefHeight="56" style="-fx-background-color: #FBF7F0; -fx-border-color: #C8A882; -fx-border-width: 0 0 1 0;">
                 <children>
                     <!-- Judul kecil tengah (dekoratif) -->
-                    <Label text="☕  Selamat datang, silakan pesan!" style="-fx-text-fill: #A0522D;">
+                    <Label style="-fx-text-fill: #A0522D;" text="☕  Selamat datang, silakan pesan!">
                         <font><Font size="12.0" /></font>
                     </Label>
-                    <Region HBox.hgrow="ALWAYS"/>
-                    <Button fx:id="adminModeButton" mnemonicParsing="false"
-                            onAction="#handleAdminMode" text="⚙  Admin Mode"
-                            style="-fx-background-color: #1C0A00; -fx-text-fill: #C8A882; -fx-background-radius: 20; -fx-cursor: hand; -fx-font-size: 12px;">
-                        <padding><Insets top="7" left="16" bottom="7" right="16"/></padding>
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Button fx:id="adminModeButton" mnemonicParsing="false" onAction="#handleAdminMode" style="-fx-background-color: #1C0A00; -fx-text-fill: #C8A882; -fx-background-radius: 20; -fx-cursor: hand; -fx-font-size: 12px;" text="⚙  Admin Mode">
+                        <padding><Insets bottom="7" left="16" right="16" top="7" /></padding>
                     </Button>
                 </children>
-                <padding><Insets left="24" right="20"/></padding>
+                <padding><Insets left="24" right="20" /></padding>
             </HBox>
 
             <!-- ===== HALAMAN WELCOME ===== -->
@@ -166,104 +150,84 @@
                     <!-- Judul utama -->
                     <VBox alignment="CENTER" spacing="6">
                         <children>
-                            <Label text="Halo! Selamat datang di SiBarista"
-                                   style="-fx-text-fill: #1C0A00;">
+                            <Label style="-fx-text-fill: #1C0A00;" text="Halo! Selamat datang di SiBarista">
                                 <font><Font name="System Bold" size="28.0" /></font>
                             </Label>
-                            <Label text="Tanyakan menu, harga, atau rekomendasikan kopi favoritmu."
-                                   style="-fx-text-fill: #A0522D;">
+                            <Label style="-fx-text-fill: #A0522D;" text="Tanyakan menu, harga, atau rekomendasikan kopi favoritmu.">
                                 <font><Font size="13.0" /></font>
                             </Label>
                         </children>
                     </VBox>
 
                     <!-- Chip saran cepat -->
-                    <HBox spacing="10" alignment="CENTER">
+                    <HBox alignment="CENTER" spacing="10">
                         <children>
-                            <Button text="☕ Lihat Menu" mnemonicParsing="false" onAction="#handleMenu"
-                                    style="-fx-background-color: #FBF7F0; -fx-text-fill: #6B3A2A; -fx-border-color: #C8A882; -fx-border-width: 1; -fx-border-radius: 20; -fx-background-radius: 20; -fx-font-size: 12px; -fx-cursor: hand;">
-                                <padding><Insets top="8" left="16" bottom="8" right="16"/></padding>
+                            <Button mnemonicParsing="false" onAction="#handleMenu" style="-fx-background-color: #FBF7F0; -fx-text-fill: #6B3A2A; -fx-border-color: #C8A882; -fx-border-width: 1; -fx-border-radius: 20; -fx-background-radius: 20; -fx-font-size: 12px; -fx-cursor: hand;" text="☕ Lihat Menu">
+                                <padding><Insets bottom="8" left="16" right="16" top="8" /></padding>
                             </Button>
-                            <Button text="🌟 Rekomendasi" mnemonicParsing="false"
-                                    style="-fx-background-color: #FBF7F0; -fx-text-fill: #6B3A2A; -fx-border-color: #C8A882; -fx-border-width: 1; -fx-border-radius: 20; -fx-background-radius: 20; -fx-font-size: 12px; -fx-cursor: hand;">
-                                <padding><Insets top="8" left="16" bottom="8" right="16"/></padding>
+                            <Button mnemonicParsing="false" onAction="#handleRekomendasi" style="-fx-background-color: #FBF7F0; -fx-text-fill: #6B3A2A; -fx-border-color: #C8A882; -fx-border-width: 1; -fx-border-radius: 20; -fx-background-radius: 20; -fx-font-size: 12px; -fx-cursor: hand;" text="🌟 Rekomendasi">
+                                <padding><Insets bottom="8" left="16" right="16" top="8" /></padding>
                             </Button>
-                            <Button text="💰 Harga" mnemonicParsing="false"
-                                    style="-fx-background-color: #FBF7F0; -fx-text-fill: #6B3A2A; -fx-border-color: #C8A882; -fx-border-width: 1; -fx-border-radius: 20; -fx-background-radius: 20; -fx-font-size: 12px; -fx-cursor: hand;">
-                                <padding><Insets top="8" left="16" bottom="8" right="16"/></padding>
+                            <Button mnemonicParsing="false" style="-fx-background-color: #FBF7F0; -fx-text-fill: #6B3A2A; -fx-border-color: #C8A882; -fx-border-width: 1; -fx-border-radius: 20; -fx-background-radius: 20; -fx-font-size: 12px; -fx-cursor: hand;" text="💰 Harga">
+                                <padding><Insets bottom="8" left="16" right="16" top="8" /></padding>
                             </Button>
                         </children>
                     </HBox>
 
                     <!-- Input box -->
-                    <StackPane maxWidth="560.0"
-                               style="-fx-background-color: #FBF7F0; -fx-background-radius: 16; -fx-border-color: #C8A882; -fx-border-width: 1; -fx-border-radius: 16; -fx-effect: dropshadow(gaussian, rgba(107,58,42,0.12), 12, 0, 0, 3);">
+                    <StackPane maxWidth="560.0" style="-fx-background-color: #FBF7F0; -fx-background-radius: 16; -fx-border-color: #C8A882; -fx-border-width: 1; -fx-border-radius: 16; -fx-effect: dropshadow(gaussian, rgba(107,58,42,0.12), 12, 0, 0, 3);">
                         <children>
-                            <VBox spacing="12.0" maxWidth="520.0">
+                            <VBox maxWidth="520.0" spacing="12.0">
                                 <children>
-                                    <TextField fx:id="messageField" onAction="#handleSend"
-                                               promptText="Ketik pesan atau perintah..."
-                                               style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 14px; -fx-text-fill: #1C0A00; -fx-prompt-text-fill: #C8A882;" />
+                                    <TextField fx:id="messageField" onAction="#handleSend" promptText="Ketik pesan atau perintah..." style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 14px; -fx-text-fill: #1C0A00; -fx-prompt-text-fill: #C8A882;" />
                                     <!-- Garis pemisah tipis -->
-                                    <Region prefHeight="1" style="-fx-background-color: #C8A882;" maxWidth="1.7976931348623157E308"/>
+                                    <Region maxWidth="1.7976931348623157E308" prefHeight="1" style="-fx-background-color: #C8A882;" />
                                     <HBox alignment="CENTER_LEFT" spacing="8">
                                         <children>
-                                            <Button onAction="#handleMenu" text="☕ Menu"
-                                                    style="-fx-background-color: #F0E6D3; -fx-text-fill: #6B3A2A; -fx-background-radius: 12; -fx-font-size: 12px; -fx-cursor: hand;">
-                                                <padding><Insets top="6" left="12" bottom="6" right="12"/></padding>
+                                            <Button onAction="#handleMenu" style="-fx-background-color: #F0E6D3; -fx-text-fill: #6B3A2A; -fx-background-radius: 12; -fx-font-size: 12px; -fx-cursor: hand;" text="☕ Menu">
+                                                <padding><Insets bottom="6" left="12" right="12" top="6" /></padding>
                                             </Button>
                                             <Region HBox.hgrow="ALWAYS" />
-                                            <Button fx:id="sendButton" mnemonicParsing="false"
-                                                    onAction="#handleSend"
-                                                    prefHeight="34.0" prefWidth="34.0" text="↑"
-                                                    style="-fx-background-color: #1C0A00; -fx-text-fill: #C8A882; -fx-background-radius: 20; -fx-font-size: 16px; -fx-cursor: hand;" />
+                                            <Button fx:id="sendButton" mnemonicParsing="false" onAction="#handleSend" prefHeight="34.0" prefWidth="34.0" style="-fx-background-color: #1C0A00; -fx-text-fill: #C8A882; -fx-background-radius: 20; -fx-font-size: 16px; -fx-cursor: hand;" text="↑" />
                                         </children>
                                     </HBox>
                                 </children>
                             </VBox>
                         </children>
-                        <padding><Insets top="18.0" right="18.0" bottom="18.0" left="18.0" /></padding>
+                        <padding><Insets bottom="18.0" left="18.0" right="18.0" top="18.0" /></padding>
                     </StackPane>
 
                 </children>
             </VBox>
 
             <!-- ===== AREA CHAT ===== -->
-            <VBox fx:id="chatAreaWrapper" spacing="0" visible="false" managed="false" VBox.vgrow="ALWAYS">
+            <VBox fx:id="chatAreaWrapper" managed="false" spacing="0" visible="false" VBox.vgrow="ALWAYS">
                 <children>
 
                     <!-- ScrollPane Percakapan -->
-                    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
-                                style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;"
-                                VBox.vgrow="ALWAYS">
+                    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;" vbarPolicy="AS_NEEDED" VBox.vgrow="ALWAYS">
                         <content>
-                            <VBox fx:id="chatContainer" spacing="16.0" prefWidth="800.0">
+                            <VBox fx:id="chatContainer" prefWidth="800.0" spacing="16.0">
                                 <padding>
-                                    <Insets top="28.0" right="50.0" bottom="24.0" left="50.0" />
+                                    <Insets bottom="24.0" left="50.0" right="50.0" top="28.0" />
                                 </padding>
                             </VBox>
                         </content>
                     </ScrollPane>
 
                     <!-- Garis pemisah -->
-                    <Region prefHeight="1" style="-fx-background-color: #C8A882;" maxWidth="1.7976931348623157E308"/>
+                    <Region maxWidth="1.7976931348623157E308" prefHeight="1" style="-fx-background-color: #C8A882;" />
 
                     <!-- Input Bar Bawah -->
-                    <HBox alignment="CENTER_LEFT" spacing="12.0"
-                          style="-fx-background-color: #FBF7F0;">
+                    <HBox alignment="CENTER_LEFT" spacing="12.0" style="-fx-background-color: #FBF7F0;">
                         <children>
-                            <Button mnemonicParsing="false" onAction="#handleMenu" text="☕ Menu"
-                                    style="-fx-background-color: #F0E6D3; -fx-text-fill: #6B3A2A; -fx-background-radius: 12; -fx-font-size: 12px; -fx-cursor: hand;">
-                                <padding><Insets top="8" left="14" bottom="8" right="14"/></padding>
+                            <Button mnemonicParsing="false" onAction="#handleMenu" style="-fx-background-color: #F0E6D3; -fx-text-fill: #6B3A2A; -fx-background-radius: 12; -fx-font-size: 12px; -fx-cursor: hand;" text="☕ Menu">
+                                <padding><Insets bottom="8" left="14" right="14" top="8" /></padding>
                             </Button>
-                            <TextField fx:id="chatInputField" onAction="#handleSendFromChat"
-                                       promptText="Ketik pesan atau tanya sesuatu..." HBox.hgrow="ALWAYS"
-                                       style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 14px; -fx-text-fill: #1C0A00; -fx-prompt-text-fill: #C8A882;" />
-                            <Button mnemonicParsing="false" onAction="#handleSendFromChat"
-                                    prefHeight="36.0" prefWidth="36.0" text="↑"
-                                    style="-fx-background-color: #1C0A00; -fx-text-fill: #C8A882; -fx-background-radius: 20; -fx-font-size: 16px; -fx-cursor: hand;" />
+                            <TextField fx:id="chatInputField" onAction="#handleSendFromChat" promptText="Ketik pesan atau tanya sesuatu..." style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 14px; -fx-text-fill: #1C0A00; -fx-prompt-text-fill: #C8A882;" HBox.hgrow="ALWAYS" />
+                            <Button mnemonicParsing="false" onAction="#handleSendFromChat" prefHeight="36.0" prefWidth="36.0" style="-fx-background-color: #1C0A00; -fx-text-fill: #C8A882; -fx-background-radius: 20; -fx-font-size: 16px; -fx-cursor: hand;" text="↑" />
                         </children>
-                        <padding><Insets top="14.0" bottom="14.0" left="50.0" right="50.0"/></padding>
+                        <padding><Insets bottom="14.0" left="50.0" right="50.0" top="14.0" /></padding>
                     </HBox>
 
                 </children>
