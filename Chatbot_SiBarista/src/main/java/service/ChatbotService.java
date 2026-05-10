@@ -234,8 +234,7 @@ public class ChatbotService {
                 - Coffee
                 - Non-Coffee
                 - Snack
-                - Latte
-                - Croissant
+   
 
                 Jika butuh panduan, ketik: Help
                 """;
