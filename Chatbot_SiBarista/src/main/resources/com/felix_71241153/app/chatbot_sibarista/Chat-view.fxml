@@ -80,19 +80,32 @@
                         <VBox.margin><Insets left="10" right="10" /></VBox.margin>
                     </HBox>
 
-                    <!-- About -->
-                    <HBox alignment="CENTER_LEFT" spacing="12" style="-fx-background-color: transparent; -fx-background-radius: 8; -fx-cursor: hand;">
-                        <children>
-                            <Label style="-fx-text-fill: #C8A882;" text="📖">
-                                <font><Font size="14.0" /></font>
-                            </Label>
-                            <Label style="-fx-text-fill: #C8A882;" text="About">
-                                <font><Font size="13.0" /></font>
-                            </Label>
-                        </children>
-                        <padding><Insets bottom="10" left="14" right="14" top="10" /></padding>
+                    <!-- ===== KERANJANG (menggantikan About) ===== -->
+                    <Button fx:id="cartButton"
+                            mnemonicParsing="false"
+                            onAction="#handleCart"
+                            maxWidth="1.7976931348623157E308"
+                            style="-fx-background-color: transparent;
+                                   -fx-background-radius: 8;
+                                   -fx-cursor: hand;
+                                   -fx-alignment: CENTER_LEFT;
+                                   -fx-padding: 0;">
                         <VBox.margin><Insets left="10" right="10" /></VBox.margin>
-                    </HBox>
+                        <graphic>
+                            <HBox alignment="CENTER_LEFT" spacing="12"
+                                  style="-fx-background-color: transparent; -fx-background-radius: 8;">
+                                <children>
+                                    <Label fx:id="cartIconLabel" style="-fx-text-fill: #C8A882;" text="🛒">
+                                        <font><Font size="14.0" /></font>
+                                    </Label>
+                                    <Label fx:id="cartButton_label" style="-fx-text-fill: #C8A882;" text="Keranjang">
+                                        <font><Font size="13.0" /></font>
+                                    </Label>
+                                </children>
+                                <padding><Insets bottom="10" left="14" right="14" top="10" /></padding>
+                            </HBox>
+                        </graphic>
+                    </Button>
 
                 </children>
             </VBox>
@@ -126,7 +139,6 @@
             <!-- Topbar -->
             <HBox alignment="CENTER_RIGHT" prefHeight="56" style="-fx-background-color: #FBF7F0; -fx-border-color: #C8A882; -fx-border-width: 0 0 1 0;">
                 <children>
-                    <!-- Judul kecil tengah (dekoratif) -->
                     <Label style="-fx-text-fill: #A0522D;" text="☕  Selamat datang, silakan pesan!">
                         <font><Font size="12.0" /></font>
                     </Label>
@@ -180,7 +192,6 @@
                             <VBox maxWidth="520.0" spacing="12.0">
                                 <children>
                                     <TextField fx:id="messageField" onAction="#handleSend" promptText="Ketik pesan atau perintah..." style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-font-size: 14px; -fx-text-fill: #1C0A00; -fx-prompt-text-fill: #C8A882;" />
-                                    <!-- Garis pemisah tipis -->
                                     <Region maxWidth="1.7976931348623157E308" prefHeight="1" style="-fx-background-color: #C8A882;" />
                                     <HBox alignment="CENTER_LEFT" spacing="8">
                                         <children>

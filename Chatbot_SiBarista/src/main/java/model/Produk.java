@@ -1,5 +1,15 @@
 package model;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+
+import database.Database;
+
 public class Produk {
     private String idProduk;
     private String namaProduk;
@@ -23,6 +33,8 @@ public class Produk {
         this.statusStok = statusStok;
         this.gambar = gambar;
     }
+
+    // ── Getters & Setters ────────────────────────────────────────────────────
 
     public String getIdProduk() {
         return idProduk;
@@ -80,6 +92,8 @@ public class Produk {
         this.statusStok = statusStok;
     }
 
+    // ── Helpers ──────────────────────────────────────────────────────────────
+
     public String getDetailProduk() {
         return String.format("%s (%s) - Rp%d [%s]", namaProduk, namaKategori, harga, statusStok);
     }
@@ -97,5 +111,79 @@ public class Produk {
                 ", nama='" + namaProduk + '\'' +
                 ", kategori='" + namaKategori + '\'' +
                 '}';
+    }
+
+    // ── Database Methods ─────────────────────────────────────────────────────
+
+    /**
+     * Mengambil semua data produk dari database
+     */
+    public List<Produk> getAllProduk() throws SQLException {
+        List<Produk> listProduk = new ArrayList<>();
+
+        // Sesuaikan dengan nama tabel di database Anda
+        String query = "SELECT * FROM produk";
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Produk p = new Produk();
+                // PENTING: Sesuaikan nama-nama kolom di bawah ini dengan struktur tabel database Anda!
+                p.setIdProduk(rs.getString("id_produk"));
+                p.setNamaProduk(rs.getString("nama_produk"));
+                p.setNamaKategori(rs.getString("id_kategori"));
+                p.setDeskripsi(rs.getString("deskripsi"));
+                p.setHarga(rs.getInt("harga"));
+                p.setStatusStok(rs.getString("status_stok"));
+                p.setGambar(rs.getString("gambar"));
+
+                listProduk.add(p);
+            }
+        }
+        return listProduk;
+    }
+
+    /**
+     * Mengambil data produk berdasarkan kategori tertentu dari database
+     */
+    // --- Perubahan pada Produk.java ---
+
+    /**
+     * Mengambil data produk berdasarkan kategori tertentu dari database.
+     * Diubah menggunakan 'int' karena database menggunakan ID angka.
+     */
+    public List<Produk> getProdukByKategori(int idKategori) throws SQLException {
+        List<Produk> listProduk = new ArrayList<>();
+
+        // 1. Sesuaikan nama kolom: Gunakan 'id_kategori' (bukan 'kategori')
+        String query = "SELECT * FROM produk WHERE id_kategori = ?";
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            // 2. Gunakan setInt karena idKategori adalah angka
+            stmt.setInt(1, idKategori);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Produk p = new Produk();
+                    p.setIdProduk(rs.getString("id_produk"));
+                    p.setNamaProduk(rs.getString("nama_produk"));
+
+                    // Mengambil ID Kategori sebagai String untuk property namaKategori
+                    p.setNamaKategori(rs.getString("id_kategori"));
+
+                    p.setDeskripsi(rs.getString("deskripsi"));
+                    p.setHarga(rs.getInt("harga"));
+                    p.setStatusStok(rs.getString("status_stok"));
+                    p.setGambar(rs.getString("gambar"));
+
+                    listProduk.add(p);
+                }
+            }
+        }
+        return listProduk;
     }
 }

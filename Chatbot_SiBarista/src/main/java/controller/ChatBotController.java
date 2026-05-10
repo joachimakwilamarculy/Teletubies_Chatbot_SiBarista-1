@@ -1,8 +1,10 @@
 package controller;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import service.KeranjangService;
 import service.ChatbotService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,7 +20,6 @@ import javafx.scene.Node;
 import model.Produk;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import java.io.InputStream;
 
 import java.sql.SQLException;
 
@@ -26,6 +27,10 @@ public class ChatBotController {
 
     // --- Deklarasi elemen FXML ---
     @FXML private Button adminModeButton;
+
+    /** Tombol Keranjang di sidebar (menggantikan About). */
+    @FXML private Button cartButton;
+
     @FXML private VBox welcomeBox;
     @FXML private TextField messageField;
     @FXML private Button sendButton;
@@ -43,31 +48,76 @@ public class ChatBotController {
     // Parchment Cream : #F0E6D3
     // Steamed Milk    : #FBF7F0
 
-    private ChatbotService chatbotService = new ChatbotService();
+    private final ChatbotService    chatbotService    = new ChatbotService();
+    private final KeranjangService  keranjangService  = KeranjangService.getInstance();
+
+    // =========================================================================
+    //  INIT
+    // =========================================================================
 
     @FXML
     public void initialize() {
         chatAreaWrapper.setVisible(false);
         chatAreaWrapper.setManaged(false);
+        refreshKeranjangBadge();
     }
 
-    // --- Handling Tombol & Input ---
+    // =========================================================================
+    //  TOMBOL KERANJANG
+    // =========================================================================
+
+    /**
+     * Buka halaman keranjang (keranjang-view.fxml).
+     * Dipanggil oleh onAction="#handleKeranjang" pada cartButton di FXML.
+     */
+    @FXML
+    private void handleCart(ActionEvent event) {
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+                    getClass().getResource(
+                            "/com/felix_71241153/app/chatbot_sibarista/keranjang-view.fxml")
+            );
+            javafx.scene.Parent root = loader.load();
+
+            javafx.stage.Stage stage = (javafx.stage.Stage) cartButton.getScene().getWindow();
+            javafx.scene.Scene scene = new javafx.scene.Scene(root, stage.getWidth(), stage.getHeight());
+            stage.setScene(scene);
+            stage.setTitle("SiBarista – Keranjang");
+
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Perbarui teks tombol keranjang di sidebar agar menampilkan
+     * jumlah item, contoh: "🛒  Keranjang (3)".
+     */
+    private void refreshKeranjangBadge() {
+        if (cartButton == null) return;
+        int total = keranjangService.getTotalJumlah();
+        if (total > 0) {
+            cartButton.setText("🛒  Keranjang (" + total + ")");
+        } else {
+            cartButton.setText("🛒  Keranjang");
+        }
+    }
+
+    // =========================================================================
+    //  HANDLING TOMBOL & INPUT
+    // =========================================================================
 
     @FXML
     private void handleAdminMode(ActionEvent event) {
         try {
-            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/com/felix_71241153/app/chatbot_sibarista/login-view.fxml"));
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+                    getClass().getResource(
+                            "/com/felix_71241153/app/chatbot_sibarista/login-view.fxml")
+            );
             javafx.scene.Parent root = loader.load();
 
             javafx.stage.Stage stage = (javafx.stage.Stage) adminModeButton.getScene().getWindow();
-
-            // 1. Simpan ukuran jendela saat ini
-            double width = stage.getWidth();
-            double height = stage.getHeight();
-
-            // 2. Set scene baru dengan ukuran yang sama dengan jendela sebelumnya
-            javafx.scene.Scene scene = new javafx.scene.Scene(root, width, height);
-
+            javafx.scene.Scene scene = new javafx.scene.Scene(root, stage.getWidth(), stage.getHeight());
             stage.setScene(scene);
             stage.setTitle("Admin Login - SiBarista");
 
@@ -79,9 +129,7 @@ public class ChatBotController {
     private void kirimPesanDari(TextField field, boolean perluTransisi) throws SQLException {
         String input = field.getText().trim();
         if (!input.isEmpty()) {
-            if (perluTransisi) {
-                transisiKeModeChat();
-            }
+            if (perluTransisi) transisiKeModeChat();
             prosesInput(input);
             field.clear();
             scrollKeBelow();
@@ -100,25 +148,21 @@ public class ChatBotController {
 
     @FXML
     private void handleMenu(ActionEvent event) throws SQLException {
-        String input = "Menu";
-        if (welcomeBox.isVisible()) {
-            transisiKeModeChat();
-        }
-        prosesInput(input);
+        if (welcomeBox.isVisible()) transisiKeModeChat();
+        prosesInput("Menu");
         scrollKeBelow();
     }
 
     @FXML
     private void handleRekomendasi(ActionEvent event) throws SQLException {
-        String input = "rekomendasi";
-        if (welcomeBox.isVisible()) {
-            transisiKeModeChat();
-        }
-        prosesInput(input);
+        if (welcomeBox.isVisible()) transisiKeModeChat();
+        prosesInput("rekomendasi");
         scrollKeBelow();
     }
 
-    // --- Logika Internal Controller ---
+    // =========================================================================
+    //  LOGIKA INTERNAL
+    // =========================================================================
 
     private void transisiKeModeChat() {
         welcomeBox.setVisible(false);
@@ -127,35 +171,18 @@ public class ChatBotController {
         chatAreaWrapper.setManaged(true);
     }
 
-//    private void prosesInput(String pesanUser) throws SQLException {
-//        tambahGelembungChat(pesanUser, true);
-//        String balasanBot = chatbotService.prosesInput(pesanUser);
-//        tambahGelembungChat(balasanBot, false);
-//    }
-
     private void prosesInput(String pesanUser) throws SQLException {
-        // 1. Tampilkan pesan user di chat
         tambahGelembungChat(pesanUser, true, null);
 
-        // 2. Cek apakah input user adalah nama produk (untuk ambil gambar)
         Produk p = chatbotService.balasanDetail(pesanUser);
-
         if (p != null) {
-            // Jika ketemu produk, ambil teks detail dan objek produknya (untuk gambar)
-            String balasanBot = chatbotService.formatDetailProduk(p);
-            tambahGelembungChat(balasanBot, false, p);
+            tambahGelembungChat(chatbotService.formatDetailProduk(p), false, p);
         } else {
-            // Jika bukan produk (misal: "Halo" atau "Menu"), ambil balasan String biasa
-            String balasanBot = chatbotService.prosesInput(pesanUser);
-            tambahGelembungChat(balasanBot, false, null);
+            tambahGelembungChat(chatbotService.prosesInput(pesanUser), false, null);
         }
     }
 
-    /**
-     * Auto-scroll ke pesan terbawah setelah pesan baru ditambahkan.
-     */
     private void scrollKeBelow() {
-        // Cari ScrollPane yang menjadi parent dari chatContainer
         javafx.application.Platform.runLater(() -> {
             for (Node node : chatAreaWrapper.getChildren()) {
                 if (node instanceof ScrollPane scrollPane) {
@@ -166,93 +193,30 @@ public class ChatBotController {
         });
     }
 
-    /**
-     * Menambahkan gelembung chat ke dalam chatContainer.
-     *
-     * Tampilan:
-     *  - USER  : kanan, background Espresso (#1C0A00), teks Steamed Milk (#FBF7F0)
-     *            dengan sudut: 15 15 0 15
-     *  - BOT   : kiri, background Latte Tan (#C8A882) tipis / Parchment (#F0E6D3),
-     *            teks Espresso (#1C0A00), dengan sudut: 15 15 15 0
-     *            ditambah label "☕ SiBarista" di atas gelembung
-     */
-//    private void tambahGelembungChat(String pesan, boolean isUser) {
-//
-//        Label labelPesan = new Label(pesan);
-//        labelPesan.setWrapText(true);
-//        labelPesan.setMaxWidth(420);
-//        labelPesan.setPadding(new Insets(12, 18, 12, 18));
-//
-//        HBox barisChat = new HBox();
-//        barisChat.setMaxWidth(Double.MAX_VALUE);
-//
-//        if (isUser) {
-//            // --- Bubble User ---
-//            labelPesan.setStyle(
-//                    "-fx-background-color: #1C0A00;" +
-//                            "-fx-text-fill: #FBF7F0;" +
-//                            "-fx-background-radius: 15 15 0 15;" +
-//                            "-fx-font-size: 13px;"
-//            );
-//            barisChat.setAlignment(Pos.CENTER_RIGHT);
-//            barisChat.getChildren().add(labelPesan);
-//
-//        } else {
-//            // --- Label nama bot ---
-//            Label labelNama = new Label("☕  SiBarista");
-//            labelNama.setStyle(
-//                    "-fx-text-fill: #A0522D;" +
-//                            "-fx-font-size: 11px;" +
-//                            "-fx-font-style: italic;"
-//            );
-//
-//            // --- Bubble Bot ---
-//            labelPesan.setStyle(
-//                    "-fx-background-color: #FBF7F0;" +
-//                            "-fx-text-fill: #1C0A00;" +
-//                            "-fx-background-radius: 15 15 15 0;" +
-//                            "-fx-font-size: 13px;" +
-//                            "-fx-border-color: #C8A882;" +
-//                            "-fx-border-width: 1;" +
-//                            "-fx-border-radius: 15 15 15 0;"
-//            );
-//
-//            VBox botWrapper = new VBox(4, labelNama, labelPesan);
-//            botWrapper.setAlignment(Pos.TOP_LEFT);
-//
-//            barisChat.setAlignment(Pos.CENTER_LEFT);
-//            barisChat.getChildren().add(botWrapper);
-//        }
-//
-//        chatContainer.getChildren().add(barisChat);
-//    }
-
     private Image loadGambarProduk(String namaFileGambar) {
-        if (namaFileGambar == null || namaFileGambar.isEmpty()) {
-            return null;
-        }
+        if (namaFileGambar == null || namaFileGambar.isEmpty()) return null;
         try {
             Path resourcesPath = Paths.get(
                     "Chatbot_SiBarista", "src", "main", "resources", "images", namaFileGambar
             );
-            if (Files.exists(resourcesPath)) {
-                return new Image(resourcesPath.toUri().toString());
-            }
+            if (Files.exists(resourcesPath)) return new Image(resourcesPath.toUri().toString());
             System.out.println("Gambar tidak ditemukan: " + namaFileGambar);
-            return null;
         } catch (Exception e) {
             System.out.println("Gagal load gambar: " + e.getMessage());
-            return null;
         }
+        return null;
     }
 
-    // Tambahkan parameter Produk p
+    // =========================================================================
+    //  GELEMBUNG CHAT
+    // =========================================================================
+
     private void tambahGelembungChat(String pesan, boolean isUser, Produk p) {
         HBox barisChat = new HBox();
         barisChat.setMaxWidth(Double.MAX_VALUE);
 
         if (isUser) {
-            // --- Bagian User (Tetap Sama) ---
+            // --- Bubble User ---
             Label labelPesan = new Label(pesan);
             labelPesan.setWrapText(true);
             labelPesan.setMaxWidth(420);
@@ -265,19 +229,28 @@ public class ChatBotController {
             );
             barisChat.setAlignment(Pos.CENTER_RIGHT);
             barisChat.getChildren().add(labelPesan);
+
         } else {
+            // --- Bubble Bot ---
             Label labelNama = new Label("☕  SiBarista");
-            labelNama.setStyle("-fx-text-fill: #A0522D; -fx-font-size: 11px; -fx-font-style: italic;");
+            labelNama.setStyle(
+                    "-fx-text-fill: #A0522D; -fx-font-size: 11px; -fx-font-style: italic;"
+            );
 
             VBox bubbleBox = new VBox(10);
             bubbleBox.setPadding(new Insets(12, 18, 12, 18));
-            bubbleBox.setStyle("-fx-background-color: #FBF7F0; -fx-background-radius: 15 15 15 0; -fx-border-color: #C8A882; -fx-border-width: 1; -fx-border-radius: 15 15 15 0;");
+            bubbleBox.setStyle(
+                    "-fx-background-color: #FBF7F0;" +
+                            "-fx-background-radius: 15 15 15 0;" +
+                            "-fx-border-color: #C8A882;" +
+                            "-fx-border-width: 1;" +
+                            "-fx-border-radius: 15 15 15 0;"
+            );
 
-            // 1. TAMBAHKAN GAMBAR DULU (Agar muncul paling atas di gelembung)
+            // 1. Gambar produk (jika ada)
             if (p != null && p.getGambar() != null && !p.getGambar().isEmpty()) {
                 try {
                     Image image = loadGambarProduk(p.getGambar());
-
                     if (image != null) {
                         ImageView imageView = new ImageView(image);
                         imageView.setFitWidth(220);
@@ -289,19 +262,48 @@ public class ChatBotController {
                 }
             }
 
-            // 2. BARU TAMBAHKAN LABEL PESAN (Detail Menu)
+            // 2. Teks detail produk
             Label labelPesan = new Label(pesan);
             labelPesan.setWrapText(true);
             labelPesan.setStyle("-fx-text-fill: #1C0A00; -fx-font-size: 13px;");
             bubbleBox.getChildren().add(labelPesan);
 
-            // 3. Tambahkan Label Penutup (Optional)
-//            if (p != null) {
-//                Label labelFooter = new Label("Jika ingin melihat kategori lain, ketik \"Menu\".");
-//                labelFooter.setWrapText(true);
-//                labelFooter.setStyle("-fx-text-fill: #1C0A00; -fx-font-size: 11px; -fx-font-style: italic;");
-//                bubbleBox.getChildren().add(labelFooter);
-//            }
+            // 3. Tombol "Tambah ke Keranjang" — hanya muncul jika ada produk
+            if (p != null) {
+                Button btnKeranjang = new Button("🛒  Tambah ke Keranjang");
+                final String styleDefault =
+                        "-fx-background-color: #1C0A00; -fx-text-fill: #FBF7F0;" +
+                                "-fx-font-size: 12px; -fx-cursor: hand;" +
+                                "-fx-background-radius: 8; -fx-padding: 7 18 7 18;";
+                final String styleSuccess =
+                        "-fx-background-color: #6B3A2A; -fx-text-fill: #FBF7F0;" +
+                                "-fx-font-size: 12px; -fx-cursor: hand;" +
+                                "-fx-background-radius: 8; -fx-padding: 7 18 7 18;";
+
+                btnKeranjang.setStyle(styleDefault);
+
+                final Produk produkRef = p;
+                btnKeranjang.setOnAction(e -> {
+                    keranjangService.tambahProduk(produkRef);
+                    refreshKeranjangBadge();
+
+                    // Feedback visual singkat
+                    btnKeranjang.setText("✓  Ditambahkan!");
+                    btnKeranjang.setStyle(styleSuccess);
+                    btnKeranjang.setDisable(true);
+
+                    new Thread(() -> {
+                        try { Thread.sleep(1500); } catch (InterruptedException ex) { /* abaikan */ }
+                        javafx.application.Platform.runLater(() -> {
+                            btnKeranjang.setText("🛒  Tambah ke Keranjang");
+                            btnKeranjang.setStyle(styleDefault);
+                            btnKeranjang.setDisable(false);
+                        });
+                    }).start();
+                });
+
+                bubbleBox.getChildren().add(btnKeranjang);
+            }
 
             VBox botWrapper = new VBox(4, labelNama, bubbleBox);
             botWrapper.setAlignment(Pos.TOP_LEFT);
@@ -311,6 +313,4 @@ public class ChatBotController {
 
         chatContainer.getChildren().add(barisChat);
     }
-
-
 }
